@@ -1,10 +1,12 @@
 import 'dart:convert';
-import 'package:flutter/cupertino.dart';
+
+//import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:recipe_app/Models/recipe.dart';
 import 'package:http/http.dart' as http;
 import 'package:recipe_app/Screens/recipe_tile.dart';
 import 'package:recipe_app/secret.dart';
+import 'dart:core';
 
 class MyHomePage extends StatefulWidget {
   @override
@@ -27,8 +29,8 @@ class _MyHomePageState extends State<MyHomePage> {
       _loading = true;
     });
 
-    var recipeData = await http.get(
-        "https://api.edamam.com/search?q=$ingredient&app_id=$appId&app_key=$appKey");
+    var recipeData = await http.get(Uri.parse(
+        "https://api.edamam.com/search?q=$ingredient&app_id=$appId&app_key=$appKey"));
 
     Map<String, dynamic> jsonData = await jsonDecode(recipeData.body);
     print(jsonData);
@@ -105,13 +107,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [
-                      const Color(0xff355070),
-                      const Color(0xff6d597a),
-                    ],
-                        begin: FractionalOffset.topRight,
-                        end: FractionalOffset.bottomLeft)),
+                    // color: Color(0xffF5F0E6),
+                    //color: Color(0xffEEEFF2),
+                    // color: Color(0xFFFDE0D9),
+                    //   color: Color(0xFFF8F8FF),
+                    //  color: Color(0xFFFBF9FA),
+                    color: Color(0xFFF8F5F3)),
               ),
               SingleChildScrollView(
                 child: Container(
@@ -130,14 +131,15 @@ class _MyHomePageState extends State<MyHomePage> {
                               "Recipe",
                               style: TextStyle(
                                   fontSize: 24,
-                                  color: Color(0xff03071e),
+                                  color: Color(0xFF2C384A),
+//                                  color: Color(0xff03071e),
                                   fontWeight: FontWeight.w600),
                             ),
                             Text(
                               "App",
                               style: TextStyle(
                                   fontSize: 24,
-                                  color: Colors.green,
+                                  color: Colors.blueAccent,
                                   fontWeight: FontWeight.w600),
                             )
                           ],
@@ -170,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       Text(
                         "What will you cook today?",
                         style: TextStyle(
-                            color: Color(0xfff5e6e8),
+                            color: Color(0xFF2C384A),
                             fontSize: 18,
                             fontWeight: FontWeight.w400),
                       ),
@@ -178,70 +180,68 @@ class _MyHomePageState extends State<MyHomePage> {
                       Text(
                         "Just Enter Ingredients you have and we will show the best recipe for you",
                         style: TextStyle(
-                            color: Color(0xfff5e6e8),
+                            color: Color(0xFF2C384A),
                             fontSize: 15,
                             fontWeight: FontWeight.w400),
                       ),
-                      SizedBox(height: 14),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: TextField(
-                              // controller: _textEditingController,
-                              onChanged: (value) => {ingredient = value},
-                              decoration: InputDecoration(
-                                enabled: true,
-                                hintText: "Enter Ingridients",
-                              ),
-                              style: TextStyle(
-                                color: Color(0xfff5e6e8),
-                                fontSize: 16,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 20.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                // controller: _textEditingController,
+                                onChanged: (value) => {ingredient = value},
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  enabledBorder: InputBorder.none,
+                                  disabledBorder: InputBorder.none,
+                                  enabled: true,
+                                  hintText: "Enter Ingridients",
+                                ),
+                                style: TextStyle(
+                                  color: Color(0xFF2C384A),
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              FocusScope.of(context).unfocus();
-                              if (ingredient != null) {
-                                recipes = [];
-                                getRecipes();
-                              }
-                            },
-                            child: Container(
-                                padding: EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                    color: Colors.brown[200],
-                                    borderRadius: BorderRadius.circular(30)),
-                                child: Icon(Icons.search)),
-                          ),
-                        ],
+                            GestureDetector(
+                              onTap: () {
+                                FocusScope.of(context).unfocus();
+                                if (ingredient != null) {
+                                  recipes = [];
+                                  getRecipes();
+                                }
+                              },
+                              child: Container(
+                                  padding: EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                      color: Colors.brown[200],
+                                      borderRadius: BorderRadius.circular(30)),
+                                  child: Icon(Icons.search)),
+                            ),
+                          ],
+                        ),
                       ),
-                      _loading
-                          ? Container(
-                              height: MediaQuery.of(context).size.height - 200,
-                              child: Center(child: CircularProgressIndicator()),
-                            )
-                          : GridView(
-                              padding: EdgeInsets.symmetric(
-                                vertical: 24,
-                              ),
-                              shrinkWrap: true,
-                              physics: ClampingScrollPhysics(),
-                              gridDelegate:
-                                  SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
-                                mainAxisSpacing: 10.0,
-                                crossAxisSpacing: 10.0,
-                              ),
-                              children: List.generate(recipes.length, (index) {
-                                return RecipeTile(
-                                  label: recipes[index].label,
-                                  url: recipes[index].url,
-                                  imgUrl: recipes[index].imgurl,
-                                  source: recipes[index].source,
-                                );
-                              }),
-                            ),
+                      Container(
+                        // decoration: BoxDecoration(
+                        //     color: Colors.white,
+                        //     borderRadius: BorderRadius.circular(25)),
+                        child: _loading
+                            ? Container(
+                                height:
+                                    MediaQuery.of(context).size.height - 350,
+                                child:
+                                    Center(child: CircularProgressIndicator()),
+                              )
+                            : Container(
+                                //margin: EdgeInsets.only(top: 10),
+                                //padding: EdgeInsets.all(10),
+                                // decoration: BoxDecoration(
+                                //     color: Colors.white,
+                                //     borderRadius: BorderRadius.circular(25)),
+                                child: recipeView()),
+                      ),
                     ],
                   ),
                 ),
@@ -249,5 +249,25 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ));
+  }
+
+  Widget recipeView() {
+    return GridView.builder(
+      padding: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      shrinkWrap: true,
+      physics: ClampingScrollPhysics(),
+      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        mainAxisSpacing: 20.0,
+        crossAxisSpacing: 20.0,
+      ),
+      itemCount: recipes.length,
+      itemBuilder: (context, index) => RecipeTile(
+        label: recipes[index].label,
+        url: recipes[index].url,
+        imgUrl: recipes[index].imgurl,
+        source: recipes[index].source,
+      ),
+    );
   }
 }
