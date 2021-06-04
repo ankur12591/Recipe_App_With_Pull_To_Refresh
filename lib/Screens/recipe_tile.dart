@@ -13,6 +13,7 @@ class RecipeTile extends StatelessWidget {
 
   RecipeTile({this.label,this.url,this.imgUrl,this.source});
 
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -28,7 +29,11 @@ class RecipeTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-                child: Image.network(imgUrl),
+                child:
+                Image.network(imgUrl,errorBuilder: (BuildContext context, Object exception, StackTrace stackTrace) {
+                  return Text('     Error in image ...', textAlign: TextAlign.center,);
+                },),
+
             ),
             Container(
               decoration: BoxDecoration(

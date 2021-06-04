@@ -45,6 +45,7 @@ class _RecipeViewState extends State<RecipeView> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         child: WebView(
+          javascriptMode: JavascriptMode.unrestricted,
           initialUrl:  widget.url,
           onWebViewCreated: (WebViewController webViewController){
             _controller.complete(webViewController);
